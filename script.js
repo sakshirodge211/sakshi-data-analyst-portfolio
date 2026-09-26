@@ -1,0 +1,10 @@
+const menuBtn=document.getElementById("menuBtn"),nav=document.getElementById("nav"),navLinks=document.querySelectorAll(".nav-link"),sections=document.querySelectorAll("main section"),typingText=document.getElementById("typingText"),cursorGlow=document.getElementById("cursorGlow");
+menuBtn.addEventListener("click",()=>nav.classList.toggle("open"));
+navLinks.forEach(link=>link.addEventListener("click",()=>nav.classList.remove("open")));
+const sectionObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(link=>link.classList.toggle("active",link.getAttribute("href")==="#"+entry.target.id));}})},{rootMargin:"-35% 0px -55% 0px"});
+sections.forEach(s=>sectionObserver.observe(s));
+const revealObserver=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target)}})},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>revealObserver.observe(el));
+const phrases=["clear insights.","smart dashboards.","better decisions.","business value."];let pi=0,ci=0,del=false;
+function typeLoop(){const p=phrases[pi];typingText.textContent=del?p.slice(0,ci--):p.slice(0,ci++);if(!del&&ci>p.length){del=true;setTimeout(typeLoop,1300);return}if(del&&ci<0){del=false;pi=(pi+1)%phrases.length;ci=0}setTimeout(typeLoop,del?55:90)} typeLoop();
+window.addEventListener("mousemove",e=>{if(cursorGlow){cursorGlow.style.left=e.clientX+"px";cursorGlow.style.top=e.clientY+"px"}});
